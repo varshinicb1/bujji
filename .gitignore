@@ -12,3 +12,5 @@ chromadb/
 .pytest_cache/
 .ruff_cache/
 site/
+airllm/
+antigravity-sdk/
