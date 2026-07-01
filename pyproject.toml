@@ -1,14 +1,14 @@
 [project]
 name = "bujji"
-version = "2.0.0"
-description = "BUJJI - Local-first AI Agent SDK (Ollama + AirLLM)"
+version = "2.1.0"
+description = "BUJJI - The first truly local-first AI Agent SDK. Run powerful agents on your laptop with Ollama, AirLLM, and 13+ built-in tools."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [
-    { name = "BUJJI Team" },
+    { name = "Varshini CB", email = "varshinicb1@gmail.com" },
 ]
-keywords = ["ai", "agent", "ollama", "airllm", "llm", "local", "sdk"]
+keywords = ["ai", "agent", "ollama", "airllm", "llm", "local", "sdk", "autonomous", "tool-use"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -18,13 +18,13 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Environment :: Console",
 ]
 
 dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.31.0",
-    "langgraph>=0.2.0",
-    "langchain-core>=0.3.0",
     "pydantic>=2.9.0",
     "pydantic-settings>=2.5.0",
     "pyyaml>=6.0",
@@ -41,6 +41,12 @@ dependencies = [
 
 [project.scripts]
 bujji = "bujji.cli.main:cli"
+
+[project.urls]
+Homepage = "https://github.com/varshinicb1/bujji"
+Repository = "https://github.com/varshinicb1/bujji"
+Documentation = "https://github.com/varshinicb1/bujji#readme"
+"Bug Tracker" = "https://github.com/varshinicb1/bujji/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -80,6 +86,9 @@ select = ["E", "F", "I", "N", "W", "UP"]
 [tool.ruff.format]
 quote-style = "double"
 
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F401", "F841"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
@@ -88,6 +97,20 @@ python_files = ["test_*.py"]
 addopts = "-v --cov=bujji --cov-report=term-missing"
 filterwarnings = [
     "ignore::DeprecationWarning:pytest_asyncio.*",
+    "ignore::DeprecationWarning:langchain.*",
+]
+timeout = 120
+
+[tool.coverage.run]
+source = ["bujji"]
+omit = ["tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
 ]
 
 [tool.mypy]
