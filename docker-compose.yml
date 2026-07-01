@@ -1,0 +1,31 @@
+services:
+  bujji:
+    build: .
+    container_name: bujji
+    ports:
+      - "8000:8000"
+    volumes:
+      - bujji_data:/root/.bujji
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - BUJJI_LLM__PROVIDER=${BUJJI_LLM__PROVIDER:-ollama}
+      - BUJJI_LLM__MODEL=${BUJJI_LLM__MODEL:-llama3.2}
+      - BUJJI_LLM__BASE_URL=${BUJJI_LLM__BASE_URL:-http://host.docker.internal:11434}
+      - BUJJI_LLM__API_KEY=${BUJJI_LLM__API_KEY:-}
+      - BUJJI_ROUTER__LOCAL_THRESHOLD=${BUJJI_ROUTER__LOCAL_THRESHOLD:-0.7}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    restart: unless-stopped
+
+  # Ollama (optional, for local inference)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: bujji-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  bujji_data:
+  ollama_data:

@@ -1,0 +1,56 @@
+site_name: BUJJI
+site_description: AI Engineering Assistant for OpenCode
+site_author: BUJJI Team
+repo_url: https://github.com/yourorg/bujji
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: blue
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.expand
+    - navigation.indexes
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [bujji]
+          options:
+            show_source: true
+            show_root_heading: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - admonition
+  - codehilite
+
+nav:
+  - Home: index.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - Core Components: architecture/core.md
+    - LLM Providers: architecture/providers.md
+    - Memory System: architecture/memory.md
+    - Tool System: architecture/tools.md
+  - Guides:
+    - Installation: guides/installation.md
+    - Configuration: guides/configuration.md
+    - Plugin Development: guides/plugins.md
+    - Provider Development: guides/providers.md
+  - Reference:
+    - CLI: reference/cli.md
+    - API: reference/api.md
+    - Configuration: reference/configuration.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Testing: development/testing.md

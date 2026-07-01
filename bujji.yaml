@@ -1,0 +1,30 @@
+llm:
+  provider: ollama
+  model: llama3.2
+  base_url: http://localhost:11434
+  temperature: 0.1
+  max_tokens: 4096
+  timeout: 60
+
+memory:
+  type: sqlite
+  sqlite_path: ~/.bujji/memory.db
+  chroma_path: ~/.bujji/chromadb
+  vector_collection: bujji_memory
+  embedding_model: all-MiniLM-L6-v2
+
+tools:
+  browser_headless: true
+  terminal_sandbox: true
+  git_require_approval: true
+  max_command_timeout: 300
+
+router:
+  local_threshold: 0.7
+  max_local_tokens: 4096
+
+logging:
+  level: INFO
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level:<7} | {name}:{function}:{line} | {message}"
+  rotation: 10 MB
+  retention: 30 days
