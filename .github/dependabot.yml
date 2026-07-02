@@ -1,0 +1,42 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Kolkata
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      test-deps:
+        patterns:
+          - pytest*
+      lint-deps:
+        patterns:
+          - ruff
+          - mypy
+          - pre-commit
+    ignore:
+      - dependency-name: torch
+        update-types:
+          - version-update:semver-patch
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+      include: scope
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Kolkata
+    labels:
+      - ci
+    commit-message:
+      prefix: ci
+      include: scope

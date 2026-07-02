@@ -58,10 +58,10 @@ jobs:
           curl -fsSL https://ollama.com/install.sh | sh
           ollama serve &
           sleep 5
-          ollama pull qwen3:0.5b
+          ollama pull qwen2.5:0.5b
       - name: Install dependencies
         run: uv sync --group dev
       - name: Run stress tests
-        run: uv run pytest tests/ -v
+        run: uv run python stress_test.py
         env:
-          BUJJI_MODEL: qwen3:0.5b
+          BUJJI_MODEL: qwen2.5:0.5b

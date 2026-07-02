@@ -1,0 +1,35 @@
+{
+  "context_window": {
+    "track_100_mean_ms": 0.001,
+    "track_100_median_ms": 0.001,
+    "estimate_tokens_1000chars": 250
+  },
+  "latency_simple": {
+    "prompt": "What is 2+2?",
+    "min": 1.175101500000892,
+    "max": 2.0432569999993575,
+    "mean": 1.5957827700001872,
+    "median": 1.553090450000127,
+    "stdev": 0.27347696735884686,
+    "samples": 10
+  },
+  "latency_code": {
+    "prompt": "Write a Python function to sort a list of dicts by",
+    "min": 2.9255324000005203,
+    "max": 3.8574996999996074,
+    "mean": 3.156948829999601,
+    "median": 3.1106851999993523,
+    "stdev": 0.27888554112107483,
+    "samples": 10
+  },
+  "memory": {
+    "facts_given": 5,
+    "correct_recall": 4,
+    "retention_pct": 80.0
+  },
+  "tools": {
+    "tool_tests": 5,
+    "tool_accuracy": 80.0,
+    "correct": 4
+  }
+}
