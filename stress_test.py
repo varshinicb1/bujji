@@ -100,9 +100,6 @@ async def run_tests():
                 continue
             if level not in level_stats:
                 level_stats[level] = [0, 0]
-                print(f"  [SKIP] [{level}] {name} (small model)")
-                skipped += 1
-                continue
             try:
                 if sys_inst is not None:
                     agent2 = Agent(_make_config(system_instructions=sys_inst))
