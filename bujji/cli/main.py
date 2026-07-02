@@ -2,6 +2,7 @@ import asyncio
 from pathlib import Path
 
 import click
+from bujji import __version__
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -23,15 +24,19 @@ def get_settings() -> Settings:
     return _settings
 
 
-def get_agent() -> AssistantAgent:
+def get_agent(model: str | None = None) -> AssistantAgent:
     global _agent
+    settings = get_settings()
+    if model:
+        settings.llm.model = model
+        _agent = None
     if _agent is None:
-        _agent = AssistantAgent(get_settings())
+        _agent = AssistantAgent(settings)
     return _agent
 
 
 @click.group()
-@click.version_option(version="1.0.0", prog_name="bujji")
+@click.version_option(version=__version__, prog_name="bujji")
 def cli() -> None:
     """BUJJI - AI Engineering Assistant for OpenCode."""
 
@@ -39,16 +44,17 @@ def cli() -> None:
 @cli.command()
 @click.argument("message", required=False)
 @click.option("--stream", is_flag=True, help="Stream the response")
-def chat(message: str | None, stream: bool) -> None:
+@click.option("--model", default=None, help="Model to use (overrides config)")
+def chat(message: str | None, stream: bool, model: str | None) -> None:
     """Chat with BUJJI."""
     if not message:
         message = click.prompt("You")
-    asyncio.run(_chat(message, stream))
+    asyncio.run(_chat(message, stream, model))
 
 
-async def _chat(message: str, stream: bool) -> None:
+async def _chat(message: str, stream: bool, model: str | None = None) -> None:
     from bujji.core.models import ChatRequest
-    agent = get_agent()
+    agent = get_agent(model)
     await agent.initialize()
     response = await agent.process(ChatRequest(message=message, stream=stream))
     console.print(Panel(Markdown(response.response), title="BUJJI", border_style="blue"))
@@ -56,13 +62,14 @@ async def _chat(message: str, stream: bool) -> None:
 
 @cli.command()
 @click.argument("task")
-def plan(task: str) -> None:
+@click.option("--model", default=None, help="Model to use (overrides config)")
+def plan(task: str, model: str | None) -> None:
     """Create a plan for a task."""
-    asyncio.run(_plan(task))
+    asyncio.run(_plan(task, model))
 
 
-async def _plan(task: str) -> None:
-    agent = get_agent()
+async def _plan(task: str, model: str | None = None) -> None:
+    agent = get_agent(model)
     await agent.initialize()
     plan_result = await agent.planner.plan(task)
     console.print(Panel(f"Goal: {plan_result.goal}", title="Plan", border_style="green"))

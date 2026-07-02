@@ -36,8 +36,13 @@ class AssistantAgent(Agent):
     ) -> ChatResponse:
         await self._ensure_initialized()
 
-        plan = await self.plan_task(request.message)
-        route = await self.route_task(request.message, plan)
+        try:
+            plan = await self.plan_task(request.message)
+            route = await self.route_task(request.message, plan)
+        except Exception:
+            plan = Plan(task=request.message, subtasks=[])
+            from bujji.core.models import RouterDecision
+            route = RouterDecision(can_handle_locally=True)
 
         if route.can_handle_locally:
             response = await self.llm.generate(

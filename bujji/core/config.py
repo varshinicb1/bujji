@@ -7,7 +7,7 @@ from yaml import safe_load
 
 class LLMProviderConfig(BaseSettings):
     provider: Literal["ollama", "openai", "openrouter", "anthropic", "local", "airllm"] = "ollama"
-    model: str = "qwen3"
+    model: str = "qwen2.5:0.5b"
     base_url: str | None = None
     api_key: str | None = None
     temperature: float = 0.1

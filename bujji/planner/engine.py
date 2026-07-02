@@ -45,16 +45,20 @@ class Planner:
 
         plan_data = self._parse_response(response.content)
 
-        subtasks = [
-            Subtask(
-                id=str(uuid.uuid4()),
-                description=s["description"],
-                dependencies=s.get("dependencies", []),
-                required_tools=s.get("required_tools", []),
-                estimated_complexity=float(s.get("estimated_complexity", 0.5)),
+        subtasks = []
+        for s in plan_data.get("subtasks", []):
+            deps = s.get("dependencies", [])
+            if deps and isinstance(deps[0], int):
+                deps = [str(d) for d in deps]
+            subtasks.append(
+                Subtask(
+                    id=str(uuid.uuid4()),
+                    description=s["description"],
+                    dependencies=deps,
+                    required_tools=s.get("required_tools", []),
+                    estimated_complexity=float(s.get("estimated_complexity", 0.5)),
+                )
             )
-            for s in plan_data.get("subtasks", [])
-        ]
 
         return Plan(
             task=task,

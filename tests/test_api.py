@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from bujji import __version__
 from bujji.api.server import app
 
 client = TestClient(app)
@@ -11,7 +12,7 @@ class TestAPI:
         assert response.status_code == 200
         data = response.json()
         assert data["service"] == "BUJJI"
-        assert data["version"] == "1.0.0"
+        assert data["version"] == __version__
         assert data["status"] == "running"
 
     def test_chat_no_message(self):
@@ -34,4 +35,4 @@ class TestAPI:
         assert response.status_code == 200
         schema = response.json()
         assert schema["info"]["title"] == "BUJJI API"
-        assert schema["info"]["version"] == "1.0.0"
+        assert schema["info"]["version"] == __version__

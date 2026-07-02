@@ -3,6 +3,7 @@ from typing import Any
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from bujji import __version__
 from bujji.agents.assistant import AssistantAgent
 from bujji.core.config import Settings, load_config
 from bujji.core.models import ChatRequest as ChatRequestModel
@@ -10,7 +11,7 @@ from bujji.core.models import ChatRequest as ChatRequestModel
 app = FastAPI(
     title="BUJJI API",
     description="AI Engineering Assistant API",
-    version="1.0.0",
+    version=__version__,
 )
 
 _agent: AssistantAgent | None = None
@@ -55,7 +56,7 @@ async def startup() -> None:
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"service": "BUJJI", "version": "1.0.0", "status": "running"}
+    return {"service": "BUJJI", "version": __version__, "status": "running"}
 
 
 @app.post("/chat")
@@ -118,7 +119,7 @@ async def list_providers() -> dict[str, str | list[str]]:
 async def get_status() -> dict[str, Any]:
     agent = get_agent()
     return {
-        "version": "1.0.0",
+        "version": __version__,
         "provider": agent.llm.provider.provider_name,
         "model": agent.llm.provider.model_name,
         "memory": await agent.memory.get_stats(),

@@ -11,7 +11,7 @@ class TestSettings:
     def test_default_settings(self):
         settings = Settings()
         assert settings.llm.provider == "ollama"
-        assert settings.llm.model == "qwen3"
+        assert settings.llm.model == "qwen2.5:0.5b"
         assert settings.memory.type == "sqlite"
         assert settings.router.local_threshold == 0.7
         assert settings.logging.level == "INFO"

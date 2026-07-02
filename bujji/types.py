@@ -14,6 +14,8 @@ from typing import Any, Literal
 
 import pydantic
 
+from bujji.core.models import Message as Message
+
 __all__ = [
     # Config
     "CapabilitiesConfig",
@@ -22,6 +24,8 @@ __all__ = [
     "McpSseServer",
     "McpStreamableHttpServer",
     "McpServerConfig",
+    # Core types
+    "Message",
     # Tool types
     "ToolCall",
     "ToolResult",
