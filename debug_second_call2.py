@@ -1,7 +1,9 @@
 """Debug second LLM call - try arguments as object vs string."""
 import asyncio
-import httpx
 import json
+
+import httpx
+
 
 async def test():
     # Try with arguments as object (not string)

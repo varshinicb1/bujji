@@ -6,12 +6,11 @@ Combines Antigravity SDK patterns with BUJJI's core models.
 
 from __future__ import annotations
 
-import asyncio
 import enum
-import json
 import mimetypes
 import pathlib
-from typing import Annotated, Any, AsyncIterator, Callable, Literal
+from collections.abc import AsyncIterator, Callable
+from typing import Any, Literal
 
 import pydantic
 
@@ -64,7 +63,7 @@ __all__ = [
 # =============================================================================
 
 
-class BuiltinTools(str, enum.Enum):
+class BuiltinTools(enum.StrEnum):
     """Built-in tools available to the agent."""
 
     VIEW_FILE = "View"
@@ -197,7 +196,7 @@ PythonTool = Callable[..., Any]
 # =============================================================================
 
 
-class StepType(str, enum.Enum):
+class StepType(enum.StrEnum):
     TEXT_RESPONSE = "text_response"
     TOOL_CALL = "tool_call"
     SYSTEM_MESSAGE = "system_message"
@@ -206,21 +205,21 @@ class StepType(str, enum.Enum):
     UNKNOWN = "unknown"
 
 
-class StepSource(str, enum.Enum):
+class StepSource(enum.StrEnum):
     SYSTEM = "system"
     USER = "user"
     MODEL = "model"
     UNKNOWN = "unknown"
 
 
-class StepTarget(str, enum.Enum):
+class StepTarget(enum.StrEnum):
     USER = "user"
     ENVIRONMENT = "environment"
     UNSPECIFIED = "unspecified"
     UNKNOWN = "unknown"
 
 
-class StepStatus(str, enum.Enum):
+class StepStatus(enum.StrEnum):
     ACTIVE = "active"
     DONE = "done"
     WAITING_FOR_USER = "waiting_for_user"
@@ -277,12 +276,12 @@ class HookResult(pydantic.BaseModel):
 # =============================================================================
 
 
-class TriggerDelivery(str, enum.Enum):
+class TriggerDelivery(enum.StrEnum):
     SEND_IMMEDIATELY = "send_immediately"
     WAIT_IDLE = "wait_idle"
 
 
-class FileChangeKind(str, enum.Enum):
+class FileChangeKind(enum.StrEnum):
     ADDED = "added"
     MODIFIED = "modified"
     DELETED = "deleted"

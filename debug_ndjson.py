@@ -1,7 +1,9 @@
 """Debug NDJSON parsing."""
 import asyncio
-import httpx
 import json
+
+import httpx
+
 
 async def main():
     schema = {
@@ -27,10 +29,10 @@ async def main():
         print("Content-Type:", resp.headers.get("content-type"))
         print("Length:", len(raw))
         print("Lines:", raw.count("\n"))
-        
+
         lines = [l.strip() for l in raw.split("\n") if l.strip()]
         print(f"Got {len(lines)} non-empty lines")
-        
+
         for i, line in enumerate(lines):
             try:
                 obj = json.loads(line)

@@ -2,12 +2,11 @@ from typing import Any
 
 from bujji.core.config import Settings
 from bujji.core.exceptions import ConfigurationError
+from bujji.providers.airllm_provider import AirLLMProvider
 from bujji.providers.base import LLMProvider
 from bujji.providers.ollama import OllamaProvider
 from bujji.providers.openai_compat import OpenAICompatProvider
 from bujji.providers.openrouter import OpenRouterProvider
-from bujji.providers.airllm_provider import AirLLMProvider
-
 
 _PROVIDER_MAP: dict[str, type[LLMProvider]] = {
     "ollama": OllamaProvider,

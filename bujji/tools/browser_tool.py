@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import ToolResult
 from bujji.tools.base import BaseTool, ToolMetadata
@@ -120,7 +120,7 @@ class BrowserTool(BaseTool):
                         )
 
                     elif action == "extract":
-                        content = await page.content()
+                        await page.content()
                         text = await page.evaluate("() => document.body.innerText")
                         return ToolResult(
                             call_id="",

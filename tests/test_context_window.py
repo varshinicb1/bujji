@@ -1,12 +1,12 @@
 """Tests for ContextWindowManager."""
 
+from bujji.core.models import Message, Role, ToolCall
 from bujji.memory.context_window import (
     ContextWindowManager,
-    estimate_tokens,
-    estimate_message_tokens,
     create_context_manager,
+    estimate_message_tokens,
+    estimate_tokens,
 )
-from bujji.core.models import Message, Role, ToolCall
 
 
 def _msg(role: str, content: str, tool_calls=None, name=None) -> Message:

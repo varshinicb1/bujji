@@ -1,7 +1,6 @@
 """Hook runner executes registered hooks at the appropriate lifecycle points."""
 
 import logging
-from typing import Any
 
 from bujji.hooks.hooks import Hook, HookEvent, HookResult
 

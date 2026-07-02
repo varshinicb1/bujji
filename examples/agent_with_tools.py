@@ -1,9 +1,11 @@
 """BUJJI v2.0 — Agent with custom tools and MCP."""
 
 import asyncio
+
 from bujji.agent import Agent
 from bujji.connections.local.config import LocalAgentConfig
 from bujji.tools.base import tool
+
 
 @tool
 def get_weather(city: str) -> str:

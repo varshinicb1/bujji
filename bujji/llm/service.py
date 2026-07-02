@@ -1,7 +1,7 @@
 import time
-from typing import Any, Optional
+from typing import Any
 
-from bujji.core.models import Message, ProviderResponse, Role
+from bujji.core.models import Message, ProviderResponse
 from bujji.providers.base import LLMProvider
 
 
@@ -18,8 +18,8 @@ class LLMService:
     async def generate(
         self,
         messages: list[dict[str, Any]] | list[Message],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         stream: bool = False,
     ) -> ProviderResponse:
         if messages and isinstance(messages[0], dict):
@@ -45,8 +45,8 @@ class LLMService:
         self,
         messages: list[dict[str, Any]] | list[Message],
         tools: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> ProviderResponse:
         if messages and isinstance(messages[0], dict):
             parsed = []

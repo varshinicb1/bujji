@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import Message, ProviderResponse
 
@@ -19,8 +19,8 @@ class LLMProvider(ABC):
     async def generate(
         self,
         messages: list[Message],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         stream: bool = False,
     ) -> ProviderResponse:
         """Generate a response from the LLM."""
@@ -30,8 +30,8 @@ class LLMProvider(ABC):
         self,
         messages: list[Message],
         tools: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> ProviderResponse:
         """Generate a response with tool calling support."""
 

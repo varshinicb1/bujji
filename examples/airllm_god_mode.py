@@ -8,6 +8,7 @@ complex reasoning escalates to AirLLM (Qwen3-32B).
 """
 
 import asyncio
+
 from bujji.agent import Agent
 from bujji.connections.local.config import LocalAgentConfig
 

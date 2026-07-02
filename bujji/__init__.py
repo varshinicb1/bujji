@@ -6,14 +6,13 @@ and Connection (transport), with built-in tools, memory, planning, routing,
 hooks, policies, MCP integration, and triggers.
 """
 
+from bujji import types
 from bujji.agent import Agent
 from bujji.connections.connection import AgentConfig, Connection, ConnectionStrategy
 from bujji.connections.local import LocalAgentConfig
-from bujji import types
+from bujji.hooks import hooks, policy
 from bujji.memory.context_window import ContextWindowManager, create_context_manager
 from bujji.tools.tool_context import ToolContext
-from bujji.hooks import policy
-from bujji.hooks import hooks
 from bujji.utils import run_interactive_loop
 
 __version__ = "2.1.0"

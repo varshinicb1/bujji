@@ -1,6 +1,6 @@
-from typing import Any, Optional
+from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 
 from bujji.agents.assistant import AssistantAgent
@@ -13,7 +13,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-_agent: Optional[AssistantAgent] = None
+_agent: AssistantAgent | None = None
 
 
 def get_agent() -> AssistantAgent:
@@ -26,7 +26,7 @@ def get_agent() -> AssistantAgent:
 
 class ChatBody(BaseModel):
     message: str
-    conversation_id: Optional[str] = None
+    conversation_id: str | None = None
     stream: bool = False
 
 
@@ -37,7 +37,7 @@ class PlanBody(BaseModel):
 class MemorySearchBody(BaseModel):
     query: str
     limit: int = 10
-    entry_type: Optional[str] = None
+    entry_type: str | None = None
     semantic: bool = True
 
 
@@ -126,7 +126,7 @@ async def get_status() -> dict[str, Any]:
     }
 
 
-def create_app(settings: Optional[Settings] = None) -> FastAPI:
+def create_app(settings: Settings | None = None) -> FastAPI:
     if settings:
         global _agent
         _agent = AssistantAgent(settings)

@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 import httpx
 
@@ -28,8 +28,8 @@ class OpenAICompatProvider(LLMProvider):
     async def generate(
         self,
         messages: list[Message],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         stream: bool = False,
     ) -> ProviderResponse:
         payload = {
@@ -71,8 +71,8 @@ class OpenAICompatProvider(LLMProvider):
         self,
         messages: list[Message],
         tools: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> ProviderResponse:
         payload = {
             "model": self.model,

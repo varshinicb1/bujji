@@ -1,18 +1,15 @@
 """Debug tool execution loop step by step."""
 import asyncio
 import logging
-import json
-from bujji import Agent
-from bujji.connections.local import LocalAgentConfig
+
+from bujji.core.models import Message, Role
 from bujji.tools.filesystem import FilesystemTool
-from bujji.core.models import Message, Role, ToolCall
 
 logging.basicConfig(level=logging.DEBUG)
 
 async def main():
-    from bujji.providers.ollama import _serialize_messages, _parse_tool_calls
-    from bujji.providers.ollama import OllamaProvider
     from bujji.core.config import Settings
+    from bujji.providers.ollama import OllamaProvider
 
     # Step-by-step: create provider directly
     settings = Settings()

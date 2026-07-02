@@ -1,7 +1,9 @@
 """Debug the OllamaProvider generate_with_tools."""
 import asyncio
-from bujji.providers.ollama import OllamaProvider
+
 from bujji.core.models import Message, Role
+from bujji.providers.ollama import OllamaProvider
+
 
 async def main():
     provider = OllamaProvider(dict(

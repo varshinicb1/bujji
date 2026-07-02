@@ -1,6 +1,6 @@
 import asyncio
 import time
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import ToolResult
 from bujji.tools.base import BaseTool, ToolMetadata
@@ -61,7 +61,7 @@ class TerminalTool(BaseTool):
                 stdout, stderr = await asyncio.wait_for(
                     proc.communicate(), timeout=timeout
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 proc.kill()
                 elapsed = time.monotonic() - start
                 return ToolResult(

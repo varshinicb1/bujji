@@ -1,8 +1,12 @@
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import ToolResult
 from bujji.tools.base import BaseTool, ToolMetadata
+
+
+def _result(**kw: Any) -> ToolResult:
+    return ToolResult(call_id="", tool_name="filesystem", **kw)
 
 
 class FilesystemTool(BaseTool):
@@ -63,44 +67,44 @@ class FilesystemTool(BaseTool):
         try:
             if operation == "read":
                 if not path.exists():
-                    return ToolResult(call_id="", tool_name="filesystem", success=False, output="", error=f"Path not found: {path}")
+                    return _result(success=False, output="", error=f"Path not found: {path}")
                 if path.is_dir():
                     items = [str(p.relative_to(path)) for p in path.iterdir()]
-                    return ToolResult(call_id="", tool_name="filesystem", success=True, output="\n".join(sorted(items)))
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output=path.read_text(encoding="utf-8"))
+                    return _result(success=True, output="\n".join(sorted(items)))
+                return _result(success=True, output=path.read_text(encoding="utf-8"))
 
             elif operation == "write":
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content or "", encoding="utf-8")
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output=f"Written {len(content or '')} bytes to {path}")
+                return _result(success=True, output=f"Written {len(content or '')} bytes to {path}")
 
             elif operation == "list":
                 if not path.exists():
-                    return ToolResult(call_id="", tool_name="filesystem", success=False, output="", error=f"Path not found: {path}")
+                    return _result(success=False, output="", error=f"Path not found: {path}")
                 items = []
                 for p in path.iterdir():
                     suffix = "/" if p.is_dir() else ""
                     items.append(f"{p.name}{suffix}")
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output="\n".join(sorted(items)))
+                return _result(success=True, output="\n".join(sorted(items)))
 
             elif operation == "glob":
                 if pattern:
                     matches = list(path.glob(pattern))
-                    return ToolResult(call_id="", tool_name="filesystem", success=True, output="\n".join(str(m) for m in matches))
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output="")
+                    return _result(success=True, output="\n".join(str(m) for m in matches))
+                return _result(success=True, output="")
 
             elif operation == "exists":
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output=str(path.exists()))
+                return _result(success=True, output=str(path.exists()))
 
             elif operation in ("copy", "move"):
                 dest = Path(kwargs.get("dest", ""))
                 if not dest:
-                    return ToolResult(call_id="", tool_name="filesystem", success=False, output="", error="dest required for copy/move")
+                    return _result(success=False, output="", error="dest required for copy/move")
                 if operation == "copy":
                     path.write_text(path.read_text(encoding="utf-8") if path.exists() else "")
                 else:
                     path.rename(dest)
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output=f"{operation} {path} -> {dest}")
+                return _result(success=True, output=f"{operation} {path} -> {dest}")
 
             elif operation == "delete":
                 if path.is_dir():
@@ -108,10 +112,10 @@ class FilesystemTool(BaseTool):
                     shutil.rmtree(path)
                 else:
                     path.unlink()
-                return ToolResult(call_id="", tool_name="filesystem", success=True, output=f"Deleted {path}")
+                return _result(success=True, output=f"Deleted {path}")
 
             else:
-                return ToolResult(call_id="", tool_name="filesystem", success=False, output="", error=f"Unknown operation: {operation}")
+                return _result(success=False, output="", error=f"Unknown operation: {operation}")
 
         except Exception as e:
-            return ToolResult(call_id="", tool_name="filesystem", success=False, output="", error=str(e))
+            return _result(success=False, output="", error=str(e))

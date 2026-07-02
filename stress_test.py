@@ -7,12 +7,10 @@ context window management.
 """
 
 import asyncio
-import time
-import json
 import sys
+import time
 
 from bujji import Agent, LocalAgentConfig, types
-from bujji.core.models import Plan
 
 MODEL = "qwen3"
 
@@ -33,7 +31,7 @@ def _make_config(**kwargs):
 
 async def run_tests():
     print("=" * 60)
-    print(f"BUJJI v2.1 Stress Test Suite")
+    print("BUJJI v2.1 Stress Test Suite")
     print(f"Python {sys.version}")
     print(f"Model: {MODEL} (Ollama)")
     print("=" * 60)
@@ -74,7 +72,7 @@ async def run_tests():
                 else:
                     resp = await agent.chat(prompt)
                     text = await resp.text()
-                
+
                 if check is None or check in text:
                     print(f"  [PASS] {name}")
                     passed += 1

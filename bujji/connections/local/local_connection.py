@@ -7,15 +7,17 @@ ToolRunner in a loop, and streaming results back as Step objects.
 import asyncio
 import logging
 import uuid
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from bujji import types
 from bujji.connections.connection import Connection, ConnectionStrategy
-from bujji.core.models import Message, Role, ToolCall as CoreToolCall
-from bujji.memory.context_window import ContextWindowManager, create_context_manager
-from bujji.providers.factory import get_provider
-from bujji.providers.base import LLMProvider
+from bujji.core.models import Message, Role
+from bujji.core.models import ToolCall as CoreToolCall
 from bujji.llm.service import LLMService
+from bujji.memory.context_window import create_context_manager
+from bujji.providers.base import LLMProvider
+from bujji.providers.factory import get_provider
 
 _MAX_TOOL_TURNS = 25
 _PARALLEL_TOOL_LIMIT = 5
@@ -102,7 +104,6 @@ class LocalConnection(Connection):
         all_content_parts: list[str] = []
         usage = types.UsageMetadata()
         tool_turns = 0
-        last_error: str | None = None
 
         try:
             while True:
@@ -263,7 +264,7 @@ class LocalConnection(Connection):
                 yield step
                 if step.is_complete_response:
                     break
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 if self._idle.is_set() and self._queue.empty():
                     break
 

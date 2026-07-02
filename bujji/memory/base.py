@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import MemoryEntry
 
@@ -12,7 +12,7 @@ class MemoryBackend(ABC):
         """Store a memory entry and return its ID."""
 
     @abstractmethod
-    async def retrieve(self, entry_id: str) -> Optional[MemoryEntry]:
+    async def retrieve(self, entry_id: str) -> MemoryEntry | None:
         """Retrieve a memory entry by ID."""
 
     @abstractmethod
@@ -20,7 +20,7 @@ class MemoryBackend(ABC):
         self,
         query: str,
         limit: int = 10,
-        entry_type: Optional[str] = None,
+        entry_type: str | None = None,
     ) -> list[MemoryEntry]:
         """Search memory entries."""
 

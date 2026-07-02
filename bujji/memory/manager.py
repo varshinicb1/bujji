@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.config import Settings
 from bujji.core.exceptions import MemoryError
@@ -12,8 +12,8 @@ class MemoryManager:
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
-        self._sqlite: Optional[SQLiteMemory] = None
-        self._vector: Optional[VectorMemory] = None
+        self._sqlite: SQLiteMemory | None = None
+        self._vector: VectorMemory | None = None
         self._initialized = False
 
     async def initialize(self) -> None:
@@ -31,7 +31,7 @@ class MemoryManager:
         self,
         content: str,
         entry_type: str = "general",
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         await self._ensure_initialized()
         entry = MemoryEntry(
@@ -51,7 +51,7 @@ class MemoryManager:
         self,
         query: str,
         limit: int = 10,
-        entry_type: Optional[str] = None,
+        entry_type: str | None = None,
         semantic: bool = True,
     ) -> list[MemoryEntry]:
         await self._ensure_initialized()
@@ -66,7 +66,7 @@ class MemoryManager:
 
         return await self._sqlite.search(query, limit, entry_type)
 
-    async def retrieve(self, entry_id: str) -> Optional[MemoryEntry]:
+    async def retrieve(self, entry_id: str) -> MemoryEntry | None:
         await self._ensure_initialized()
         return await self._sqlite.retrieve(entry_id)
 

@@ -1,9 +1,8 @@
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.config import Settings
 from bujji.core.exceptions import RoutingError
 from bujji.core.models import Plan, RouterDecision
-
 
 CONFIDENCE_PROMPT = """You are a confidence assessment engine.
 
@@ -40,8 +39,8 @@ class Router:
     async def decide(
         self,
         task: str,
-        plan: Optional[Plan] = None,
-        context: Optional[dict[str, Any]] = None,
+        plan: Plan | None = None,
+        context: dict[str, Any] | None = None,
     ) -> RouterDecision:
         plan_summary = plan.model_dump_json(indent=2) if plan else "No plan available"
 

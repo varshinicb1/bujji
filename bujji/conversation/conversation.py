@@ -7,11 +7,11 @@ Conversation is the Layer 2 session API wrapping a Connection with:
 """
 
 import contextlib
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from bujji import types
 from bujji.connections import connection
-
 
 _DEFAULT_MAX_HISTORY_SIZE = 10_000
 

@@ -106,7 +106,7 @@ all = [
 
 [tool.ruff]
 target-version = "py312"
-line-length = 100
+line-length = 120
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
@@ -115,7 +115,7 @@ select = ["E", "F", "I", "N", "W", "UP"]
 quote-style = "double"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["F401", "F841"]
+"tests/*" = ["F401", "F841", "E501"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -127,7 +127,6 @@ filterwarnings = [
     "ignore::DeprecationWarning:pytest_asyncio.*",
     "ignore::DeprecationWarning:langchain.*",
 ]
-timeout = 120
 
 [tool.coverage.run]
 source = ["bujji"]

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import ChatRequest, ChatResponse, Plan, RouterDecision
 
@@ -11,7 +11,7 @@ class Agent(ABC):
     async def process(
         self,
         request: ChatRequest,
-        context: Optional[dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> ChatResponse:
         """Process a chat request and return a response."""
 

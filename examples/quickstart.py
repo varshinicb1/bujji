@@ -1,8 +1,10 @@
 """BUJJI v2.0 Quickstart — local-first AI agent with Ollama."""
 
 import asyncio
+
 from bujji.agent import Agent
 from bujji.connections.local.config import LocalAgentConfig
+
 
 async def main():
     config = LocalAgentConfig(

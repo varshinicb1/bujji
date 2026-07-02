@@ -1,7 +1,7 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
@@ -21,8 +21,8 @@ class VectorMemory(MemoryBackend):
         self.chroma_path = str(Path(chroma_path).expanduser().resolve())
         Path(self.chroma_path).mkdir(parents=True, exist_ok=True)
         self.collection_name = collection_name
-        self._client: Optional[chromadb.Client] = None
-        self._collection: Optional[chromadb.Collection] = None
+        self._client: chromadb.Client | None = None
+        self._collection: chromadb.Collection | None = None
 
     def _get_client(self) -> chromadb.Client:
         if self._client is None:
@@ -59,7 +59,7 @@ class VectorMemory(MemoryBackend):
         )
         return entry_id
 
-    async def retrieve(self, entry_id: str) -> Optional[MemoryEntry]:
+    async def retrieve(self, entry_id: str) -> MemoryEntry | None:
         collection = self._get_collection()
         try:
             result = collection.get(ids=[entry_id])
@@ -74,10 +74,10 @@ class VectorMemory(MemoryBackend):
             content=result["documents"][0],
             metadata=result["metadatas"][0] if result["metadatas"] else {},
             timestamp=datetime.fromisoformat(
-                result["metadatas"][0].get("timestamp", datetime.now(timezone.utc).isoformat())
+                result["metadatas"][0].get("timestamp", datetime.now(UTC).isoformat())
             )
             if result["metadatas"]
-            else datetime.now(timezone.utc),
+            else datetime.now(UTC),
             entry_type=result["metadatas"][0].get("entry_type", "general")
             if result["metadatas"]
             else "general",
@@ -87,11 +87,11 @@ class VectorMemory(MemoryBackend):
         self,
         query: str,
         limit: int = 10,
-        entry_type: Optional[str] = None,
+        entry_type: str | None = None,
     ) -> list[MemoryEntry]:
         collection = self._get_collection()
 
-        where: Optional[dict[str, Any]] = None
+        where: dict[str, Any] | None = None
         if entry_type:
             where = {"entry_type": entry_type}
 
@@ -110,7 +110,7 @@ class VectorMemory(MemoryBackend):
                     content=results["documents"][0][i],
                     metadata=metadata,
                     timestamp=datetime.fromisoformat(
-                        metadata.get("timestamp", datetime.now(timezone.utc).isoformat())
+                        metadata.get("timestamp", datetime.now(UTC).isoformat())
                     ),
                     entry_type=metadata.get("entry_type", "general"),
                 )
@@ -147,7 +147,7 @@ class VectorMemory(MemoryBackend):
                     content=results["documents"][i],
                     metadata=metadata,
                     timestamp=datetime.fromisoformat(
-                        metadata.get("timestamp", datetime.now(timezone.utc).isoformat())
+                        metadata.get("timestamp", datetime.now(UTC).isoformat())
                     ),
                     entry_type=metadata.get("entry_type", "general"),
                 )

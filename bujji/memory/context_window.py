@@ -6,10 +6,9 @@ overflowing the window.
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import Message, Role
-from bujji.core.exceptions import ProviderError
 
 logger = logging.getLogger(__name__)
 
@@ -56,11 +55,11 @@ class ContextWindowManager:
     def __init__(
         self,
         model_name: str = "default",
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         trigger_ratio: float = _TRIGGER_RATIO,
         reserve_tokens: int = _SUMMARY_RESERVE,
         min_turns_to_keep: int = 5,
-        summarize_llm: Optional[Any] = None,
+        summarize_llm: Any | None = None,
     ) -> None:
         model_limit = _DEFAULT_MODEL_LIMITS.get(model_name, _DEFAULT_MODEL_LIMITS["default"])
         self._model_limit = max_tokens or model_limit
@@ -69,7 +68,7 @@ class ContextWindowManager:
         self._min_turns_to_keep = min_turns_to_keep
         self._summarize_llm = summarize_llm
         self._current_usage = 0
-        self._system_content: Optional[str] = None
+        self._system_content: str | None = None
         logger.info(
             "ContextWindowManager initialized: limit=%d, trigger=%d, reserve=%d",
             self._model_limit, self._trigger_threshold, self._reserve,
@@ -179,7 +178,8 @@ class ContextWindowManager:
         system_msgs = [m for m in messages if m.role == Role.system]
         non_system = [m for m in messages if m.role != Role.system]
         recent = non_system[-(self._min_turns_to_keep * 3):]
-        to_compress = non_system[:-(self._min_turns_to_keep * 3)] if len(non_system) > (self._min_turns_to_keep * 3) else []
+        keep = self._min_turns_to_keep * 3
+        to_compress = non_system[:-keep] if len(non_system) > keep else []
 
         if not to_compress:
             return messages
@@ -192,7 +192,10 @@ class ContextWindowManager:
             )
 
             summary_msg = [
-                Message(role=Role.system, content="Summarize the key information from this conversation history concisely for an AI assistant. Preserve user goals, decisions, errors, and data."),
+                Message(role=Role.system, content=(
+                    "Summarize the key information from this conversation history concisely "
+                    "for an AI assistant. Preserve user goals, decisions, errors, and data."
+                )),
                 Message(role=Role.user, content=raw[:4000]),
             ]
             summary_resp = await self._summarize_llm.generate(summary_msg, max_tokens=512)
@@ -208,9 +211,9 @@ class ContextWindowManager:
 
 def create_context_manager(
     model_name: str = "default",
-    max_tokens: Optional[int] = None,
+    max_tokens: int | None = None,
     trigger_ratio: float = _TRIGGER_RATIO,
-    summarize_llm: Optional[Any] = None,
+    summarize_llm: Any | None = None,
 ) -> ContextWindowManager:
     return ContextWindowManager(
         model_name=model_name,

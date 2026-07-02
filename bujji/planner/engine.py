@@ -1,11 +1,9 @@
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.exceptions import PlanningError
 from bujji.core.models import Plan, Subtask
 from bujji.llm.service import LLMService
-from bujji.providers.base import LLMProvider
-
 
 PLANNER_PROMPT = """You are a software engineering planning assistant.
 
@@ -34,7 +32,7 @@ class Planner:
     def __init__(self, llm_service: LLMService) -> None:
         self.llm = llm_service
 
-    async def plan(self, task: str, context: Optional[dict[str, Any]] = None) -> Plan:
+    async def plan(self, task: str, context: dict[str, Any] | None = None) -> Plan:
         if not task or not task.strip():
             raise PlanningError("Task cannot be empty")
 

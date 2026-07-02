@@ -1,7 +1,9 @@
 """Debug what Ollama returns for tool calls."""
 import asyncio
-import httpx
 import json
+
+import httpx
+
 
 async def main():
     schema = {

@@ -3,7 +3,7 @@ import sqlite3
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import MemoryEntry
 from bujji.memory.base import MemoryBackend
@@ -15,7 +15,7 @@ class SQLiteMemory(MemoryBackend):
     def __init__(self, db_path: str) -> None:
         self.db_path = str(Path(db_path).expanduser().resolve())
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
-        self._conn: Optional[sqlite3.Connection] = None
+        self._conn: sqlite3.Connection | None = None
 
     def _get_conn(self) -> sqlite3.Connection:
         if self._conn is None:
@@ -64,7 +64,7 @@ class SQLiteMemory(MemoryBackend):
         conn.commit()
         return entry_id
 
-    async def retrieve(self, entry_id: str) -> Optional[MemoryEntry]:
+    async def retrieve(self, entry_id: str) -> MemoryEntry | None:
         await self._init_db()
         conn = self._get_conn()
         cursor = conn.execute(
@@ -85,7 +85,7 @@ class SQLiteMemory(MemoryBackend):
         self,
         query: str,
         limit: int = 10,
-        entry_type: Optional[str] = None,
+        entry_type: str | None = None,
     ) -> list[MemoryEntry]:
         await self._init_db()
         conn = self._get_conn()

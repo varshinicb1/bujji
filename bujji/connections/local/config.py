@@ -1,12 +1,10 @@
 """Local agent configuration backed by BUJJI providers."""
 
-from typing import Any, Callable
+from typing import Any
 
 import pydantic
 
 from bujji.connections.connection import AgentConfig, ConnectionStrategy
-from bujji.providers.factory import get_provider
-from bujji.core.config import Settings
 
 
 class LocalAgentConfig(AgentConfig):

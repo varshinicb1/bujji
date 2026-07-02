@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -19,7 +19,7 @@ class BaseTool(ABC):
 
     metadata: ToolMetadata
 
-    def __init__(self, config: Optional[dict[str, Any]] = None) -> None:
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         self.config = config or {}
 
     async def __call__(self, **kwargs: Any) -> Any:
@@ -49,7 +49,7 @@ class ToolRegistry:
         name = tool.metadata.name
         self._tools[name] = tool
 
-    def get(self, name: str) -> Optional[BaseTool]:
+    def get(self, name: str) -> BaseTool | None:
         return self._tools.get(name)
 
     def list_tools(self) -> list[ToolMetadata]:

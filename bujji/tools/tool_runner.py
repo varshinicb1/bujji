@@ -2,7 +2,8 @@
 
 import inspect
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from bujji.tools.base import BaseTool
 from bujji.tools.tool_context import ToolContext

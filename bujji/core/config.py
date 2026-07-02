@@ -1,7 +1,6 @@
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from yaml import safe_load
 
@@ -9,8 +8,8 @@ from yaml import safe_load
 class LLMProviderConfig(BaseSettings):
     provider: Literal["ollama", "openai", "openrouter", "anthropic", "local", "airllm"] = "ollama"
     model: str = "qwen3"
-    base_url: Optional[str] = None
-    api_key: Optional[str] = None
+    base_url: str | None = None
+    api_key: str | None = None
     temperature: float = 0.1
     max_tokens: int = 4096
     timeout: int = 60
@@ -34,7 +33,7 @@ class ToolsConfig(BaseSettings):
 class RouterConfig(BaseSettings):
     local_threshold: float = 0.7
     max_local_tokens: int = 4096
-    escalation_endpoint: Optional[str] = None
+    escalation_endpoint: str | None = None
 
 
 class LoggingConfig(BaseSettings):
@@ -71,7 +70,7 @@ class Settings(BaseSettings):
         self.project_root = str(Path(self.project_root).expanduser().resolve())
 
 
-def load_config(path: Optional[str] = None) -> Settings:
+def load_config(path: str | None = None) -> Settings:
     settings = Settings()
 
     if path:

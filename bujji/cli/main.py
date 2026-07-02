@@ -1,6 +1,5 @@
 import asyncio
 from pathlib import Path
-from typing import Optional
 
 import click
 from rich.console import Console
@@ -12,8 +11,8 @@ from bujji.agents.assistant import AssistantAgent
 from bujji.core.config import Settings, load_config
 
 console = Console()
-_settings: Optional[Settings] = None
-_agent: Optional[AssistantAgent] = None
+_settings: Settings | None = None
+_agent: AssistantAgent | None = None
 
 
 def get_settings() -> Settings:
@@ -40,7 +39,7 @@ def cli() -> None:
 @cli.command()
 @click.argument("message", required=False)
 @click.option("--stream", is_flag=True, help="Stream the response")
-def chat(message: Optional[str], stream: bool) -> None:
+def chat(message: str | None, stream: bool) -> None:
     """Chat with BUJJI."""
     if not message:
         message = click.prompt("You")

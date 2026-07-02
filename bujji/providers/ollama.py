@@ -1,5 +1,5 @@
 import json as json_mod
-from typing import Any, Optional
+from typing import Any
 
 import httpx
 
@@ -68,8 +68,8 @@ class OllamaProvider(LLMProvider):
     async def generate(
         self,
         messages: list[Message],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         stream: bool = False,
     ) -> ProviderResponse:
         payload = {
@@ -105,8 +105,8 @@ class OllamaProvider(LLMProvider):
         self,
         messages: list[Message],
         tools: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> ProviderResponse:
         payload = {
             "model": self.model,
@@ -142,7 +142,7 @@ class OllamaProvider(LLMProvider):
         text = text.strip()
         if not text:
             return {"message": {"content": ""}}
-        lines = [l.strip() for l in text.split("\n") if l.strip()]
+        lines = [line.strip() for line in text.split("\n") if line.strip()]
         # Single JSON — fast path
         if len(lines) == 1:
             try:

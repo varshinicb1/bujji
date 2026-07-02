@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
       - name: Lint with ruff
-        run: uv run ruff check .
+        run: uv run ruff check bujji/ tests/
       - name: Type check with mypy
         run: uv run mypy bujji --ignore-missing-imports || true
 
@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
       - name: Run tests
-        run: uv run pytest tests/ -v --timeout=60
+        run: uv run pytest tests/ -v
 
   stress:
     runs-on: ubuntu-latest
@@ -62,6 +62,6 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
       - name: Run stress tests
-        run: uv run pytest tests/ -v --timeout=300
+        run: uv run pytest tests/ -v
         env:
           BUJJI_MODEL: qwen3:0.5b

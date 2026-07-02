@@ -1,6 +1,7 @@
 """Quick test: basic chat + tool execution loop."""
 import asyncio
 import os
+
 from bujji import Agent
 from bujji.connections.local import LocalAgentConfig
 from bujji.tools.filesystem import FilesystemTool

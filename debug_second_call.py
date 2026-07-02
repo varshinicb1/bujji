@@ -1,9 +1,12 @@
 """Debug the second LLM call after tool execution."""
 import asyncio
-import httpx
 import json
-from bujji.providers.ollama import _serialize_messages
+
+import httpx
+
 from bujji.core.models import Message, Role, ToolCall
+from bujji.providers.ollama import _serialize_messages
+
 
 async def main():
     schema = {

@@ -20,7 +20,8 @@ from bujji.conversation import conversation
 from bujji.hooks import hook_runner, hooks, policy
 from bujji.mcp import bridge
 from bujji.tools import tool_context, tool_runner
-from bujji.triggers import trigger_runner, triggers as triggers_lib
+from bujji.triggers import trigger_runner
+from bujji.triggers import triggers as triggers_lib
 
 
 class Agent:

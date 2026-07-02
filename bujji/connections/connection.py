@@ -6,7 +6,8 @@ backend, regardless of where the agent runs.
 
 import abc
 import json
-from typing import Any, AsyncIterator, Callable
+from collections.abc import AsyncIterator, Callable
+from typing import Any
 
 import pydantic
 
@@ -43,6 +44,7 @@ class AgentConfig(abc.ABC, pydantic.BaseModel):
     skills_paths: list[str] = pydantic.Field(default_factory=list)
 
     @pydantic.field_validator("response_schema")
+    @classmethod
     def _validate_schema(cls, v):
         if v is None:
             return None

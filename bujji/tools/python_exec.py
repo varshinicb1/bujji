@@ -1,6 +1,6 @@
 import asyncio
 import time
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import ToolResult
 from bujji.tools.base import BaseTool, ToolMetadata
@@ -42,8 +42,8 @@ class PythonExecTool(BaseTool):
         code = kwargs.get("code", "")
         timeout = kwargs.get("timeout", 30)
 
-        import tempfile
         import os
+        import tempfile
 
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".py", delete=False, encoding="utf-8"
@@ -65,7 +65,7 @@ class PythonExecTool(BaseTool):
                 stdout, stderr = await asyncio.wait_for(
                     proc.communicate(), timeout=timeout
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 proc.kill()
                 elapsed = time.monotonic() - start
                 os.unlink(script_path)

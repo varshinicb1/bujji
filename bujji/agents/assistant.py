@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from bujji.agents.base import Agent
 from bujji.core.config import Settings
@@ -32,7 +32,7 @@ class AssistantAgent(Agent):
     async def process(
         self,
         request: ChatRequest,
-        context: Optional[dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> ChatResponse:
         await self._ensure_initialized()
 

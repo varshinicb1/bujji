@@ -9,8 +9,7 @@ Install: py -3.12 -m pip install airllm
 """
 
 import logging
-import sys
-from typing import Any, Optional
+from typing import Any
 
 from bujji.core.models import Message, ProviderResponse
 from bujji.providers.base import LLMProvider
@@ -63,8 +62,8 @@ class AirLLMProvider(LLMProvider):
     async def generate(
         self,
         messages: list[Message],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         stream: bool = False,
     ) -> ProviderResponse:
         self._load_model()
@@ -73,7 +72,6 @@ class AirLLMProvider(LLMProvider):
         max_new = max_tokens or self.config.get("max_tokens", 512)
         temp = temperature if temperature is not None else self.config.get("temperature", 0.1)
 
-        import torch
         inputs = self._tokenizer(
             prompt,
             return_tensors="pt",
@@ -119,8 +117,8 @@ class AirLLMProvider(LLMProvider):
         self,
         messages: list[Message],
         tools: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> ProviderResponse:
         return await self.generate(messages, temperature, max_tokens)
 
