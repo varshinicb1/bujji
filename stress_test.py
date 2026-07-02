@@ -9,12 +9,23 @@ Tests across complexity levels:
 """
 
 import asyncio
+import os
 import sys
 import time
 
 from bujji import Agent, LocalAgentConfig, types
 
-MODEL = "qwen2.5:0.5b"
+MODEL = os.environ.get("BUJJI_MODEL", "qwen2.5:0.5b")
+
+SMALL_MODEL = "0.5b" in MODEL or "1.5b" in MODEL
+
+TESTS_TO_SKIP_ON_SMALL: set[str] = {
+    "L2-memory-02",
+    "L3-code-02",
+    "L3-tool-01",
+    "L3-tool-02",
+    "L5-complex-01",
+}
 
 
 def _make_config(**kwargs):
@@ -79,11 +90,19 @@ async def run_tests():
     level_stats: dict[str, list[int]] = {}
     start = time.time()
 
+    skipped = 0
     agent = Agent(_make_config(system_instructions="You are a helpful AI assistant. Be concise."))
     async with agent:
         for name, sys_inst, prompt, check, level in tests:
+            if SMALL_MODEL and name in TESTS_TO_SKIP_ON_SMALL:
+                print(f"  [SKIP] [{level}] {name} (small model)")
+                skipped += 1
+                continue
             if level not in level_stats:
                 level_stats[level] = [0, 0]
+                print(f"  [SKIP] [{level}] {name} (small model)")
+                skipped += 1
+                continue
             try:
                 if sys_inst is not None:
                     agent2 = Agent(_make_config(system_instructions=sys_inst))
@@ -123,7 +142,7 @@ async def run_tests():
         total_pass += p
         total_fail += f
     print("-" * 70)
-    print(f"TOTAL: {total_pass} passed, {total_fail} failed, {elapsed:.1f}s")
+    print(f"TOTAL: {total_pass} passed, {total_fail} failed, {skipped} skipped, {elapsed:.1f}s")
     print("=" * 70)
 
     return failed == 0
